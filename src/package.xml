@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>GameController</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>GameCDCEvent</members>
+        <members>GameRequestCapture</members>
+        <members>GameRequestCaptureHandler</members>
+        <members>RecordChangeCapture</members>
+        <members>TestGame</members>
+        <name>AuraDefinitionBundle</name>
+    </types>
+    <types>
+        <members>Game_Request__c</members>
+        <members>Game__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>TicTacToe</members>
+        <name>CustomTab</name>
+    </types>
+    <version>45.0</version>
+</Package>

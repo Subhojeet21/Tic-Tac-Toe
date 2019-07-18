@@ -1,0 +1,115 @@
+<aura:component controller="GameController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="channelName" type="String" default="/topic/GameUpdates" />
+    <aura:attribute name="gameReqChannelName" type="String" default="/data/Game_Request__ChangeEvent" />
+    <aura:attribute name="playerIcon" type="String" default="X"/>
+    <aura:attribute name="player2" type="String" default=""/>
+    <aura:attribute name="player2Turn" type="String" default=""/>
+    <aura:attribute name="gameOver" type="Boolean" default="false"/>
+    <aura:attribute name="waitForNextTurn" type="Boolean" default="false"/>
+    <aura:attribute name="finalResult" type="String" default=""/>
+    <aura:attribute name="gameId" type="String" default=""/>
+    <aura:attribute name="nextTurn" type="String" default=""/>
+    <aura:attribute name="game" type="Game__c" default="{
+                                                        'sobjectType':'Game__c', 
+                                                        'Cell_11__c':'',
+                                                        'Cell_12__c':'',
+                                                        'Cell_13__c':'',
+                                                        'Cell_21__c':'',
+                                                        'Cell_22__c':'',
+                                                        'Cell_23__c':'',
+                                                        'Cell_31__c':'',
+                                                        'Cell_32__c':'',
+                                                        'Cell_33__c':'',
+                                                        'Winner__c':'',
+                                                        'Winning_Player_Icon__c':''
+                                                        }"/>
+    <aura:attribute name="gameRequest" type="Game_Request__c" default="{
+                                                        'sobjectType':'Game_Request__c', 
+                                                        'Player_1__c':'',
+                                                        'Player_2__c':'',
+                                                        'Request_Accepted__c':'',
+                                                        'Game__c':''
+                                                        }"/>
+    
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="possiblePlayerVals" type="List"/>
+    <aura:attribute name="playRequestAccepted" type="Boolean" default="false"/>
+    <aura:attribute name="chosenPlayer2Id" type="String" default=""/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="gameCaptureEvent" event="c:GameCDCEvent" action="{!c.handleGameCaptureEvent}"/>
+    <aura:handler name="sendRequestEvent" event="c:GameRequestCaptureHandler" action="{!c.handleSendRequestEvent}"/>
+    
+    <lightning:card footer="" title="">
+        Player : <ui:outputText class="playerChoice" value="{!v.playerIcon}"/> <br/>
+        <aura:if isTrue="{!v.playRequestAccepted}">
+            <aura:if isTrue="{!v.gameOver}">
+                GAME OVER : <ui:outputText class="finalResult" value="{!v.finalResult}"/>
+                <aura:set attribute="else">
+                    <ui:outputText class="turn" value="{!v.nextTurn}"/>
+                </aura:set>
+            </aura:if>
+        </aura:if>
+    </lightning:card>
+    
+    <aura:if isTrue="{!v.playRequestAccepted}">
+        <lightning:card footer="" title="">
+            Player 2 : <ui:outputText class="playerChoice" value="{!v.player2}"/>
+            <ui:outputText class="playerChoice" value="{!v.player2Turn}"/>
+        </lightning:card>
+        <aura:set attribute="else">
+            <lightning:card footer="" title="Choose Second Player">
+                <table class="slds-table slds-no-row-hover slds-table_bordered slds-table_col-bordered" style="table-layout: fixed; width: 300px; height:100px; margin-left:40%; ">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col" class="slds-text-title_caps">
+                                <div class="slds-truncate" title="Online Users">Online Users</div>
+                            </th>
+                            <th scope="col" class="slds-text-title_caps">
+                                <div class="slds-truncate" title=" Send Request">Send Request</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.data}" var="row" indexVar="sNo">
+                            <tr>
+                                <td>
+                                    <ui:outputText value="{!row.UserName}"/>
+                                </td>
+                                <td>
+                                    <ui:outputURL class="{!sNo}" label="Request" click="{!c.requestUser}"/>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </lightning:card>
+        </aura:set>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.playRequestAccepted}">
+    	<lightning:card footer="" title="Tic Tac Toe">
+        	<table class="slds-table slds-no-row-hover slds-table_bordered slds-table_col-bordered" style="table-layout: fixed; width: 300px; height:300px; margin-left:40%; ">
+                <tbody style="background-color:orange;">
+                    <tr>
+                        <td id="td11"><div class="div11" onclick="{!c.handleClick11}" style="text-align:center;"><br/><ui:outputText class="cellTextSize" value="{!v.game.Cell_11__c}"/></div></td>
+                        <td id="td12"><div class="div12" onclick="{!c.handleClick12}" style="text-align:center;"><br/><ui:outputText class="cellTextSize" value="{!v.game.Cell_12__c}"/></div></td>
+                        <td id="td13"><div class="div13" onclick="{!c.handleClick13}" style="text-align:center;"><br/><ui:outputText class="cellTextSize" value="{!v.game.Cell_13__c}"/></div></td>
+                    </tr>
+                    <tr>
+                        <td id="td21"><div class="div21" onclick="{!c.handleClick21}" style="text-align:center;"><br/><ui:outputText class="cellTextSize" value="{!v.game.Cell_21__c}"/></div></td>
+                        <td id="td22"><div class="div22" onclick="{!c.handleClick22}" style="text-align:center;"><br/><ui:outputText class="cellTextSize" value="{!v.game.Cell_22__c}"/></div></td>
+                        <td id="td23"><div class="div23" onclick="{!c.handleClick23}" style="text-align:center;"><br/><ui:outputText class="cellTextSize" value="{!v.game.Cell_23__c}"/></div></td>
+                    </tr>
+                    <tr>
+                        <td id="td31"><div class="div31" onclick="{!c.handleClick31}" style="text-align:center;"><br/><ui:outputText class="cellTextSize" value="{!v.game.Cell_31__c}"/></div></td>
+                        <td id="td32"><div class="div32" onclick="{!c.handleClick32}" style="text-align:center;"><br/><ui:outputText class="cellTextSize" value="{!v.game.Cell_32__c}"/></div></td>
+                        <td id="td33"><div class="div33" onclick="{!c.handleClick33}" style="text-align:center;"><br/><ui:outputText class="cellTextSize" value="{!v.game.Cell_33__c}"/></div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </lightning:card>
+    </aura:if>
+    <c:RecordChangeCapture channelName="{!v.channelName}"  />
+    <c:GameRequestCapture channelName="{!v.gameReqChannelName}"  />
+</aura:component>

@@ -1,0 +1,13 @@
+<aura:component >
+	<aura:attribute name="channelName" type="String" required="true"/>
+    <aura:attribute name="subscription" type="Object"/>
+     
+    <aura:handler name="destroy" value="{!this}" action="{!c.unsubscribe}"/>
+	<aura:handler name="init" value="{!this}" action="{!c.subscribe}"/>
+    
+    <lightning:empApi aura:id="empApi"/>
+    
+    <aura:registerEvent name="gameCaptureEvent" type="c:GameCDCEvent"/>
+    <!--<aura:registerEvent name="gameOverEvt" type="c:GameOverEvent"/>-->
+    
+</aura:component>

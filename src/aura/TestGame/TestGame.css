@@ -1,0 +1,22 @@
+.THIS .cellTextSize{
+    font-size:35px ;
+}
+
+.THIS .cellColor {
+    background-color:green;
+}
+
+.THIS .finalResult {
+    font-size:25px; 
+    color:red;
+}
+
+.THIS .playerChoice {
+    font-weight:bold;
+    font-size:20px;
+}
+
+.THIS .turn {
+    font-size:20px; 
+    color: #FF7F50;
+}
