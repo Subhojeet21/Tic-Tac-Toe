@@ -1,5 +1,15 @@
 # Tic-Tac-Toe
 
+# DEMO:
+
+<div align="center">
+  <a href="https://youtu.be/S7ZKVqYOlws"><img src="https://img.youtube.com/vi/S7ZKVqYOlws/0.jpg" alt="Tic-Tac-Toe"></a>
+</div>
+
+# More Detail:
+
+https://techietips99.wordpress.com/2019/02/08/tic-tac-toe-an-online-version-of-the-game-in-salesforce-lightning-platform/
+
 # 1. Add Push Topic
 
 PushTopic pushTopic = new PushTopic(); <br/>
