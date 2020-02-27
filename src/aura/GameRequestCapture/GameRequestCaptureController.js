@@ -49,8 +49,6 @@
     /**
      * This function will be fired once the component is destroyed
      * It will call unsubscribe method of empApi component
-     * @author Manish Choudhari
-     * @version 1.0.0
      * */
     unsubscribe : function (component, event, helper) {
         try{
